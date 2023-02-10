@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
@@ -11,7 +12,7 @@ import { ViewPaymentsTableComponent } from './view-payments-table/view-payments-
 const routes: Routes = [{ path: '', component: PaymentComponent }];
 @NgModule({
   declarations: [PaymentComponent, ViewPaymentsTableComponent, PaymentModalActionsComponent],
-  imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes), TranslocoModule, NgbDropdownModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterModule.forChild(routes), TranslocoModule, NgbDropdownModule],
   exports: [PaymentComponent, RouterModule, ViewPaymentsTableComponent],
 })
 export class PaymentsModule {}
