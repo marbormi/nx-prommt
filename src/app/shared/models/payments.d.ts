@@ -1,10 +1,7 @@
-export interface PaymentDTO {
+export interface PaymentDTO extends PaymentCreationDTO {
   id: string;
   createdDate: string;
-  payerEmail: string;
   status: PaymentStatus;
-  currency: CurrencyCode;
-  amount: number;
   paidDate: string;
 }
 

@@ -36,4 +36,9 @@ export class PaymentService {
     const url = this.API_URL + this.PATH;
     return this.http.post<PaymentDTO>(url, payment);
   }
+
+  deletePayment(uuid: string) {
+    const url = this.API_URL + this.PATH + `${uuid}`;
+    return this.http.delete<void>(url);
+  }
 }

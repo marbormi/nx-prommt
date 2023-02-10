@@ -1,8 +1,8 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { filter, Subscription, switchMap } from 'rxjs';
+import { filter, iif, Subscription, switchMap } from 'rxjs';
 import { PaymentService } from '../../core/';
-import { PaymentCreationDTO } from '../../shared';
+import { PaymentCreationDTO, PaymentDTO } from '../../shared';
 import { AddEditComponent } from './add-edit-payment/add-edit.component';
 
 @Component({
@@ -24,6 +24,7 @@ import { AddEditComponent } from './add-edit-payment/add-edit.component';
       <view-payments-table
         *ngIf="payments$ | async as payments"
         [payments]="payments"
+        (deletePayment)="open($event)"
       ></view-payments-table>
     </ng-container>
   `,
@@ -39,21 +40,26 @@ export class PaymentComponent implements OnDestroy {
 
   constructor(private paymentService: PaymentService) {}
 
-  open() {
+  open(payment?: PaymentDTO) {
     const modalRef = this.modalService.open(AddEditComponent);
+    if (payment) {
+      modalRef.componentInstance.payment = payment;
+    }
 
     this.subs.add(
       modalRef.closed
         .pipe(
           filter(Boolean),
-          switchMap((res: PaymentCreationDTO) =>
-            this.paymentService
-              .createPayment(res)
-              .pipe(
-                switchMap(
-                  () => (this.payments$ = this.paymentService.getPayments())
-                )
+          switchMap((res: PaymentDTO) =>
+            iif(
+              () => res.id !== undefined,
+              this.paymentService.deletePayment(res.id),
+              this.paymentService.createPayment(res)
+            ).pipe(
+              switchMap(
+                () => (this.payments$ = this.paymentService.getPayments())
               )
+            )
           )
         )
         .subscribe()

@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CurrencyCode, PaymentCreationDTO, PaymentDTO } from '../../../shared';
@@ -27,7 +32,7 @@ export const CURRENCIES_CODES = [
     <ng-container *transloco="let t">
       <div class="modal-header">
         <h4 class="modal-title">
-          {{ t('CREATE_PAYMENT') }}
+          {{ payment?.id ? t('DELETE') : t('CREATE_PAYMENT') }}
         </h4>
         <button
           type="button"
@@ -88,19 +93,23 @@ export const CURRENCIES_CODES = [
         </button>
 
         <button
-          class="btn btn-primary"
+          class="btn"
+          [ngClass]="{
+            'btn-danger': payment?.id !== null,
+            'btn-primary': !payment
+          }"
           type="submit"
           [disabled]="createPaymentForm.invalid"
-          (click)="create()"
+          (click)="payment?.id ? confirmDelete() : create()"
         >
-          {{ t('CREATE') }}
+          {{ payment?.id ? t('CONFIRM_DELETE') :  t('CREATE') }}
         </button>
       </div>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddEditComponent {
+export class AddEditComponent implements OnInit {
   @Input() payment?: Partial<PaymentDTO>;
 
   currencies: CurrencyCode[] = CURRENCIES_CODES.concat();
@@ -116,7 +125,17 @@ export class AddEditComponent {
 
   constructor(public activeModal: NgbActiveModal) {}
 
+  ngOnInit(): void {
+    if (this.payment) {
+      this.createPaymentForm.patchValue(this.payment);
+      this.createPaymentForm.disable();
+    }
+  }
+
   create() {
     this.activeModal.close(this.createPaymentForm.value as PaymentCreationDTO);
+  }
+  confirmDelete(){
+    this.activeModal.close(this.payment);
   }
 }
