@@ -2,15 +2,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CurrencyCode,
-  MutablePayment, PaymentDTO,
-  PAYMENT_ACTIONS
+  PaymentAction,
+  PaymentDTO,
+  PAYMENT_ACTIONS,
 } from '../../../shared';
+
 export const CURRENCIES_CODES = [
   'AED',
   'AFN',
@@ -31,7 +33,7 @@ export const CURRENCIES_CODES = [
 ] as const;
 
 @Component({
-  selector: 'nx-prommt-add-edit',
+  selector: 'payment-modal-actions',
   template: `
     <ng-container *transloco="let t">
       <div class="modal-header">
@@ -114,11 +116,10 @@ export const CURRENCIES_CODES = [
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddDeleteComponent implements OnInit {
-  @Input() payment?: Partial<PaymentDTO>;
-
+export class PaymentModalActionsComponent implements OnInit {
+  @Input() paymentAction?: PaymentAction<PaymentDTO>;
   // Default action to create.
-  @Input() action: PAYMENT_ACTIONS = 'CREATE';
+  action: PAYMENT_ACTIONS = 'CREATE';
 
   currencies: CurrencyCode[] = CURRENCIES_CODES.concat();
 
@@ -129,22 +130,32 @@ export class AddDeleteComponent implements OnInit {
     ]),
     currency: new FormControl<CurrencyCode>(null, [Validators.required]),
     amount: new FormControl<number | null>(null, [Validators.required]),
+    id: new FormControl(),
   });
 
   constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
-    if (this.payment) {
-      this.createPaymentForm.patchValue(this.payment);
+    this.action = this.paymentAction?.action || 'CREATE'
+    if (this.paymentAction?.payment) {
+      this.createPaymentForm.patchValue(this.paymentAction.payment);
       this.createPaymentForm.disable();
     }
   }
 
   performAction() {
-    const payment: MutablePayment<PaymentDTO> = {
-      payment: this.createPaymentForm.value as PaymentDTO,
-      action: this.action,
-    };
-    this.activeModal.close(payment);
+    if(this.paymentAction){
+      const paymentAction: PaymentAction<PaymentDTO> = {
+        ...this.paymentAction,
+        payment: {
+          ...(this.createPaymentForm.value as PaymentDTO),
+          id: this.paymentAction?.payment?.id || '',
+        },
+      }
+      this.activeModal.close(paymentAction);
+    }
+    else {
+      this.activeModal.close();
+    }
   }
 }

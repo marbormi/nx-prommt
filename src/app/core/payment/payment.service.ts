@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import {
+  ActionCallback,
   Environment,
-  MutablePayment,
   Page,
   PaymentCreationDTO,
   PaymentDTO,
+  PAYMENT_ACTIONS,
 } from '../../shared/';
 
 @Injectable({
@@ -21,34 +22,36 @@ export class PaymentService {
     @Inject('environment') private environment: Environment
   ) {}
 
-  getPayments(): Observable<PaymentDTO[]> {
+  getPayments = (): Observable<PaymentDTO[]> => {
     const url = this.API_URL + this.PATH;
     return this.http
       .get<Page<PaymentDTO>>(url)
-      .pipe(map((result: Page<PaymentDTO>) => result.content));
+      .pipe(map((result: Page<PaymentDTO>) => result.content), shareReplay(1));
   }
 
-  createPayment(payment: PaymentCreationDTO): Observable<PaymentDTO> {
+  getActionCallback(action?: PAYMENT_ACTIONS) : ActionCallback<PaymentDTO> {
+    switch(action){
+      case 'DELETE':
+        return this.deletePayment
+      case 'MARK_AS_PAID':
+        return this.marksAsPaid
+      default:
+        return this.createPayment
+    }
+  }
+
+  createPayment = (payment: PaymentCreationDTO): Observable<PaymentDTO>  =>{
     const url = this.API_URL + this.PATH;
     return this.http.post<PaymentDTO>(url, payment);
   }
 
-  private marksAsPaid(uuid: string) {
-    const url = this.API_URL + this.PATH + `${uuid}` + '/paid';
+  marksAsPaid = (payment: PaymentDTO) => {
+    const url = this.API_URL + this.PATH + `${payment.id}` + '/paid';
     return this.http.patch<void>(url, null);
   }
 
-
-  performAction(mPayment: MutablePayment<PaymentDTO>){
-    if(mPayment.action === 'DELETE'){
-      return this.deletePayment(mPayment.payment.id)
-    }
-    return this.marksAsPaid(mPayment.payment.id)
-  }
-
-  private deletePayment(uuid: string) {
-    const url = this.API_URL + this.PATH + `${uuid}`;
+  deletePayment = (payment: PaymentDTO) => {
+    const url = this.API_URL + this.PATH + `${payment.id}`;
     return this.http.delete<void>(url);
   }
-
 }

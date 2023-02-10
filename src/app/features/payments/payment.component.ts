@@ -1,12 +1,12 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { filter, iif, Subscription, switchMap } from 'rxjs';
+import { filter, Observable, Subscription, switchMap } from 'rxjs';
 import { PaymentService } from '../../core/';
-import { MutablePayment, PaymentDTO } from '../../shared';
-import { AddDeleteComponent } from './add-delete-payment/add-delete.component';
+import { ActionCallback, MutablePayment, PaymentAction, PaymentDTO, PAYMENT_ACTIONS } from '../../shared';
+import { PaymentModalActionsComponent } from './add-delete-payment/add-delete.component';
 
 @Component({
-  selector: 'nx-prommt-payment',
+  selector: 'payments-main',
   template: `
     <ng-container *transloco="let t">
       <nav class="navbar bg-light">
@@ -41,33 +41,24 @@ export class PaymentComponent implements OnDestroy {
   constructor(private paymentService: PaymentService) {}
 
   open(payment?: MutablePayment<PaymentDTO>) {
-    const modalRef = this.modalService.open(AddDeleteComponent);
-    if (payment) {
-      modalRef.componentInstance.payment = payment.payment;
-      modalRef.componentInstance.action = payment.action;
+    const modalRef = this.modalService.open(PaymentModalActionsComponent);
+    const paymentAction: PaymentAction<PaymentDTO> = {
+      payment: payment?.payment,
+      action: payment?.action || 'CREATE',
+      actionCallback: this.paymentService.getActionCallback(payment?.action)
     }
+    modalRef.componentInstance.paymentAction = paymentAction
 
     this.subs.add(
       modalRef.closed
         .pipe(
-          filter(Boolean),
-          switchMap((res: MutablePayment<PaymentDTO>) =>
-            iif(
-              () => res.payment && res.payment.id !== undefined,
-              this.paymentService.performAction(res),
-              this.paymentService.createPayment(res.payment)
-            ).pipe(
-              switchMap(
-                () => (this.payments$ = this.paymentService.getPayments())
-              )
-            )
-          )
+          filter((paymentAction: PaymentAction<PaymentDTO>) =>  paymentAction.payment !== undefined),
+          switchMap((paymentAction: PaymentAction<PaymentDTO>) => paymentAction.actionCallback(paymentAction.payment as PaymentDTO)),
+          switchMap(() => (this.payments$ = this.paymentService.getPayments()))
         )
         .subscribe()
     );
   }
-
-
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();

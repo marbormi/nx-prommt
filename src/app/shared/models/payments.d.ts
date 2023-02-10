@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 export interface PaymentDTO extends PaymentCreationDTO {
   id: string;
   createdDate: string;
@@ -39,4 +41,11 @@ export type PAYMENT_ACTIONS = 'CREATE' | 'DELETE' | 'MARK_AS_PAID';
 export interface MutablePayment<T> {
   payment: T;
   action: PAYMENT_ACTIONS
+}
+
+export type ActionCallback<T> = (payment: T) => Observable<T | void>
+export interface PaymentAction<T> {
+  payment?: T,
+  action: PAYMENT_ACTIONS,
+  actionCallback: ActionCallback<T>
 }
