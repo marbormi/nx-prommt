@@ -15,14 +15,6 @@
             "prefix": "nxPrommt",
             "style": "camelCase"
           }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "nx-prommt",
-            "style": "kebab-case"
-          }
         ]
       }
     },

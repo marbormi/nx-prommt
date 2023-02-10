@@ -1,4 +1,10 @@
 {
-    "hello": "transloco en",
-    "dynamic": "transloco {{value}}"
+    "PAYMENT_LIST": "Payment list",
+    "ID": "Payment ID",
+    "CREATED_DATE": "Created Date",
+    "PAYER_EMAIL": "Payer Email",
+    "STATUS": "Status",
+    "CURRENCY": "Currency",
+    "AMOUNT": "Amount",
+    "PAID_DATE": "Paid date"
   }

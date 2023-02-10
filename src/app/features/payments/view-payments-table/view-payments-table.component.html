@@ -1,0 +1,40 @@
+<ng-template transloco let-t>
+  <div class="p-4">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th *ngFor="let col of columns" scope="col">{{t(col.label)}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of payments; index as i">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>
+            {{ payment.id }}
+          </td>
+          <td>{{payment.createdDate | date }}</td>
+          <td>{{ payment.payerEmail }}</td>
+          <td>{{ payment.status }}</td>
+          <td>{{ payment.currency }}</td>
+          <td>{{ payment.amount }}</td>
+          <td>{{ payment.paidDate | date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
+<!-- <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="refreshCountries()"
+    >
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="4">4 items per page</option>
+      <option [ngValue]="6">6 items per page</option>
+    </select>
+  </div> -->

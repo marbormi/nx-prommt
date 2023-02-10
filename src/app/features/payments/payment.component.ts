@@ -1,46 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { PaymentService } from '../../core/';
 
-interface Country {
-	name: string;
-	flag: string;
-	area: number;
-	population: number;
-}
-
-const COUNTRIES: Country[] = [
-	{
-		name: 'Russia',
-		flag: 'f/f3/Flag_of_Russia.svg',
-		area: 17075200,
-		population: 146989754,
-	},
-	{
-		name: 'Canada',
-		flag: 'c/cf/Flag_of_Canada.svg',
-		area: 9976140,
-		population: 36624199,
-	},
-	{
-		name: 'United States',
-		flag: 'a/a4/Flag_of_the_United_States.svg',
-		area: 9629091,
-		population: 324459463,
-	},
-	{
-		name: 'China',
-		flag: 'f/fa/Flag_of_the_People%27s_Republic_of_China.svg',
-		area: 9596960,
-		population: 1409517397,
-	},
-];
 @Component({
   selector: 'nx-prommt-payment',
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  template: `
+    <ng-container *transloco="let t">
+      <nav class="navbar bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            {{ t('PAYMENT_LIST') }}
+          </a>
+        </div>
+      </nav>
+      <view-payments-table *ngIf="payments$ | async as payments" [payments]="payments"></view-payments-table>
+    </ng-container>
+  `,
+  styleUrls: ['./payment.component.scss'],
 })
 export class PaymentComponent {
-
-  countries = COUNTRIES;
-
-
+  // New angular v15 inject feature demonstration.
+  payments$ = inject(PaymentService).getPayments();
 }
