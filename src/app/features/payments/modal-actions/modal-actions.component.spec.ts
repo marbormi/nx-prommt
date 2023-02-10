@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaymentModalActionsComponent } from './add-delete.component';
+import { PaymentModalActionsComponent } from './modal-actions.component';
 
 describe('AddEditComponent', () => {
   let component: PaymentModalActionsComponent;

@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslocoModule } from '@ngneat/transloco';
-import { PaymentModalActionsComponent } from './add-delete-payment/add-delete.component';
+import { PaymentModalActionsComponent } from './modal-actions/modal-actions.component';
 import { PaymentComponent } from './payment.component';
 import { ViewPaymentsTableComponent } from './view-payments-table/view-payments-table.component';
 

@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter, Observable, Subscription, switchMap } from 'rxjs';
 import { PaymentService } from '../../core/';
 import { ActionCallback, MutablePayment, PaymentAction, PaymentDTO, PAYMENT_ACTIONS } from '../../shared';
-import { PaymentModalActionsComponent } from './add-delete-payment/add-delete.component';
+import { PaymentModalActionsComponent } from './modal-actions/modal-actions.component';
 
 @Component({
   selector: 'payments-main',
