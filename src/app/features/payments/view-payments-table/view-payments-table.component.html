@@ -3,12 +3,23 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th></th>
           <th *ngFor="let col of columns" scope="col">{{t(col.label)}}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let payment of payments; index as i">
-          <th scope="row">{{ i + 1 }}</th>
+          <td class="overflow-hidden">
+            <div ngbDropdown container="body">
+              <button type="button" class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Actions</button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem>Edit</button>
+                <div class="dropdown-divider"></div>
+                <button ngbDropdownItem>Delete</button>
+              </div>
+            </div>
+            <small class="text-muted">Dropdown uses container "body"</small>
+          </td>
           <td>
             {{ payment.id }}
           </td>

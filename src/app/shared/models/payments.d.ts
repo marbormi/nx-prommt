@@ -10,20 +10,29 @@ export interface PaymentDTO {
 
 export type PaymentStatus = 'UNPAID' | 'PAID';
 
-export type CurrencyCode =
-  | 'AED'
-  | 'AFN'
-  | 'EUR'
-  | 'GBP'
-  | 'JPY'
-  | 'KWD'
-  | 'MAD'
-  | 'MXN'
-  | 'NZD'
-  | 'RUB'
-  | 'SAR'
-  | 'SVC'
-  | 'USD'
-  | 'UYU'
-  | 'VEF'
-  | 'ZWD';
+export const CURRENCIES_CODES = [
+  'AED',
+  'AFN',
+  'EUR',
+  'GBP',
+  'JPY',
+  'KWD',
+  'MAD',
+  'MXN',
+  'NZD',
+  'RUB',
+  'SAR',
+  'SVC',
+  'USD',
+  'UYU',
+  'VEF',
+  'ZWD',
+] as const;
+
+export type CurrencyCode = (typeof CURRENCY_CODES)[number];
+
+export interface PaymentCreationDTO {
+  payerEmail: string;
+  currency: CurrencyCode;
+  amount: number;
+}

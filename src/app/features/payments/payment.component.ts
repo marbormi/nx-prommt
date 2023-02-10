@@ -1,5 +1,9 @@
 import { Component, inject } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap } from 'rxjs';
 import { PaymentService } from '../../core/';
+import { CURRENCIES_CODES, PaymentCreationDTO } from '../../shared';
+import { AddEditComponent } from './add-edit-payment/add-edit.component';
 
 @Component({
   selector: 'nx-prommt-payment',
@@ -10,14 +14,36 @@ import { PaymentService } from '../../core/';
           <a class="navbar-brand" href="#">
             {{ t('PAYMENT_LIST') }}
           </a>
+          <div>
+            <button type="button" class="btn btn-primary me-4" (click)="open()">
+              {{ t('CREATE') }}
+            </button>
+            <!-- <button type="button" class="btn btn-danger">{{t('CREATE')}}</button> -->
+          </div>
         </div>
       </nav>
-      <view-payments-table *ngIf="payments$ | async as payments" [payments]="payments"></view-payments-table>
+      <view-payments-table
+        *ngIf="payments$ | async as payments"
+        [payments]="payments"
+      ></view-payments-table>
     </ng-container>
   `,
   styleUrls: ['./payment.component.scss'],
 })
 export class PaymentComponent {
+  payments$ = this.paymentService.getPayments();
+
   // New angular v15 inject feature demonstration.
-  payments$ = inject(PaymentService).getPayments();
+  modalService = inject(NgbModal);
+
+  constructor(private paymentService: PaymentService) {}
+
+  open() {
+    const modalRef = this.modalService.open(AddEditComponent);
+    modalRef.closed.pipe(
+      switchMap((res: PaymentCreationDTO) =>
+        this.paymentService.createPayment(res)
+      )
+    ).subscribe((res) => console.log(res));
+  }
 }

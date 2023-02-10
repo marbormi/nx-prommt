@@ -6,5 +6,12 @@
     "STATUS": "Status",
     "CURRENCY": "Currency",
     "AMOUNT": "Amount",
-    "PAID_DATE": "Paid date"
+    "PAID_DATE": "Paid date",
+    "CREATE": "Create",
+    "UPDATE": "Update",
+    "Delete": "Delete",
+    "UPDATE_PAYMENT": "Update payment",
+    "CREATE_PAYMENT": "Create new payment",
+    "CLOSE": "Close"
+
   }
