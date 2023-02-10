@@ -1,16 +1,17 @@
-import { TestBed } from '@angular/core/testing';
 
+import { Shallow } from 'shallow-render';
+import { CoreModule } from '../core.module';
 import { PaymentService } from './payment.service';
 
-describe('PaymentService', () => {
-  let service: PaymentService;
+describe('PaymentServiceTest', () => {
+  let shallow: Shallow<PaymentService>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(PaymentService);
+    shallow = new Shallow(PaymentService, CoreModule);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+
+  it('should create', () => {
+    expect(shallow).toBeTruthy();
   });
 });

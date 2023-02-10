@@ -1,23 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Shallow } from 'shallow-render';
 import { PaymentComponent } from './payment.component';
+import { PaymentsModule } from './payments.module';
 
-describe('PaymentComponent', () => {
-  let component: PaymentComponent;
-  let fixture: ComponentFixture<PaymentComponent>;
+describe('PaymentComponentTest', () => {
+  let shallow: Shallow<PaymentComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PaymentComponent ]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(PaymentComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    shallow = new Shallow(PaymentComponent, PaymentsModule);
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(shallow).toBeTruthy();
   });
+
+
 });

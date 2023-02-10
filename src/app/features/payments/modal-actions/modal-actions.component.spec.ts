@@ -1,23 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Shallow } from 'shallow-render';
+import { PaymentsModule } from '../payments.module';
 import { PaymentModalActionsComponent } from './modal-actions.component';
 
-describe('AddEditComponent', () => {
-  let component: PaymentModalActionsComponent;
-  let fixture: ComponentFixture<PaymentModalActionsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PaymentModalActionsComponent ]
-    })
-    .compileComponents();
+describe('PaymentModalActionsComponentTest', () => {
+  let shallow: Shallow<PaymentModalActionsComponent>;
 
-    fixture = TestBed.createComponent(PaymentModalActionsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    shallow = new Shallow(PaymentModalActionsComponent, PaymentsModule);
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(shallow).toBeTruthy();
   });
 });

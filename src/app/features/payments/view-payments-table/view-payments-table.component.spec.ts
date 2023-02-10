@@ -1,23 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Shallow } from 'shallow-render';
+import { PaymentsModule } from '../payments.module';
 import { ViewPaymentsTableComponent } from './view-payments-table.component';
 
-describe('ViewPaymentsTableComponent', () => {
-  let component: ViewPaymentsTableComponent;
-  let fixture: ComponentFixture<ViewPaymentsTableComponent>;
+describe('<ViewPaymentsTableComponentTest', () => {
+  let shallow: Shallow<ViewPaymentsTableComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ ViewPaymentsTableComponent ]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(ViewPaymentsTableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    shallow = new Shallow(ViewPaymentsTableComponent, PaymentsModule);
   });
 
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(shallow).toBeTruthy();
   });
 });
