@@ -14,6 +14,7 @@
     "CREATE_PAYMENT": "Create new payment",
     "CLOSE": "Close",
     "MARK_AS_PAID": "Mark as paid",
-    "CONFIRM_DELETE": "Confirm deletion"
+    "CONFIRM_DELETE": "Confirm deletion",
+    "ACTIONS": "Actions"
 
   }

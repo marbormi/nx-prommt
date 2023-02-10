@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { PaymentDTO } from '../../../shared';
+import { MutablePayment, PaymentDTO } from '../../../shared';
 import { ViewPaymentsTableService } from './service/view-payments-table.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { ViewPaymentsTableService } from './service/view-payments-table.service'
 export class ViewPaymentsTableComponent {
   @Input() payments!: PaymentDTO[];
 
-  @Output() deletePayment = new EventEmitter<PaymentDTO>();
+  @Output() action = new EventEmitter<MutablePayment<PaymentDTO>>();
 
   columns = ViewPaymentsTableService.COLUMNS;
 }

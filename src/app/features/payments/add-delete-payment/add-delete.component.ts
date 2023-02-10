@@ -2,11 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CurrencyCode, PaymentCreationDTO, PaymentDTO } from '../../../shared';
+import {
+  CurrencyCode,
+  MutablePayment, PaymentDTO,
+  PAYMENT_ACTIONS
+} from '../../../shared';
 export const CURRENCIES_CODES = [
   'AED',
   'AFN',
@@ -32,7 +36,7 @@ export const CURRENCIES_CODES = [
     <ng-container *transloco="let t">
       <div class="modal-header">
         <h4 class="modal-title">
-          {{ payment?.id ? t('DELETE') : t('CREATE_PAYMENT') }}
+          {{ t(action) }}
         </h4>
         <button
           type="button"
@@ -95,14 +99,15 @@ export const CURRENCIES_CODES = [
         <button
           class="btn"
           [ngClass]="{
-            'btn-danger': payment?.id !== null,
-            'btn-primary': !payment
+            'btn-danger': action === 'DELETE',
+            'btn-primary': action === 'CREATE',
+            'btn-outline-primary': action === 'MARK_AS_PAID'
           }"
           type="submit"
           [disabled]="createPaymentForm.invalid"
-          (click)="payment?.id ? confirmDelete() : create()"
+          (click)="performAction()"
         >
-          {{ payment?.id ? t('CONFIRM_DELETE') :  t('CREATE') }}
+          {{ t(action) }}
         </button>
       </div>
     </ng-container>
@@ -112,6 +117,9 @@ export const CURRENCIES_CODES = [
 export class AddDeleteComponent implements OnInit {
   @Input() payment?: Partial<PaymentDTO>;
 
+  // Default action to create.
+  @Input() action: PAYMENT_ACTIONS = 'CREATE';
+
   currencies: CurrencyCode[] = CURRENCIES_CODES.concat();
 
   createPaymentForm = new FormGroup({
@@ -119,7 +127,7 @@ export class AddDeleteComponent implements OnInit {
       Validators.email,
       Validators.required,
     ]),
-    currency: new FormControl<CurrencyCode | null>(null, [Validators.required]),
+    currency: new FormControl<CurrencyCode>(null, [Validators.required]),
     amount: new FormControl<number | null>(null, [Validators.required]),
   });
 
@@ -132,11 +140,11 @@ export class AddDeleteComponent implements OnInit {
     }
   }
 
-  create() {
-    this.activeModal.close(this.createPaymentForm.value as PaymentCreationDTO);
-  }
-
-  confirmDelete(){
-    this.activeModal.close(this.payment?.id);
+  performAction() {
+    const payment: MutablePayment<PaymentDTO> = {
+      payment: this.createPaymentForm.value as PaymentDTO,
+      action: this.action,
+    };
+    this.activeModal.close(payment);
   }
 }

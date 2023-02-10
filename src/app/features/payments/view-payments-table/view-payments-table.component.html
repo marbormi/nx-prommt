@@ -11,11 +11,14 @@
         <tr *ngFor="let payment of payments; index as i">
           <td class="overflow-hidden">
             <div ngbDropdown container="body">
-              <button type="button" class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Actions</button>
+              <button type="button" class="btn btn-outline-primary btn-sm" ngbDropdownToggle>{{t('ACTIONS')}}</button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem>{{t('MARK_AS_PAID')}}</button>
+                <button ngbDropdownItem
+                  (click)="this.action.emit({payment: payment, action:'MARK_AS_PAID'})">{{t('MARK_AS_PAID')}}</button>
                 <div class="dropdown-divider"></div>
-                <button class="btn btn-danger" (click)="this.deletePayment.emit(payment)" ngbDropdownItem>{{t('DELETE')}}</button>
+                <button class="btn btn-danger" (click)="this.action.emit({payment: payment, action:'DELETE'})"
+                  ngbDropdownItem>
+                  {{t('DELETE')}}</button>
               </div>
             </div>
           </td>

@@ -4,6 +4,12 @@ export interface PaymentDTO extends PaymentCreationDTO {
   status: PaymentStatus;
   paidDate: string;
 }
+export interface PaymentCreationDTO {
+  payerEmail: string;
+  currency: CurrencyCode;
+  amount: number;
+}
+
 
 export type PaymentStatus = 'UNPAID' | 'PAID';
 
@@ -28,8 +34,9 @@ export const CURRENCIES_CODES = [
 
 export type CurrencyCode = (typeof CURRENCY_CODES)[number];
 
-export interface PaymentCreationDTO {
-  payerEmail: string;
-  currency: CurrencyCode;
-  amount: number;
+// Actions
+export type PAYMENT_ACTIONS = 'CREATE' | 'DELETE' | 'MARK_AS_PAID';
+export interface MutablePayment<T> {
+  payment: T;
+  action: PAYMENT_ACTIONS
 }

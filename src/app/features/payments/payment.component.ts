@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter, iif, Subscription, switchMap } from 'rxjs';
 import { PaymentService } from '../../core/';
-import { PaymentCreationDTO, PaymentDTO } from '../../shared';
+import { MutablePayment, PaymentDTO } from '../../shared';
 import { AddDeleteComponent } from './add-delete-payment/add-delete.component';
 
 @Component({
@@ -24,7 +24,7 @@ import { AddDeleteComponent } from './add-delete-payment/add-delete.component';
       <view-payments-table
         *ngIf="payments$ | async as payments"
         [payments]="payments"
-        (deletePayment)="open($event)"
+        (action)="open($event)"
       ></view-payments-table>
     </ng-container>
   `,
@@ -40,21 +40,22 @@ export class PaymentComponent implements OnDestroy {
 
   constructor(private paymentService: PaymentService) {}
 
-  open(payment?: PaymentDTO) {
+  open(payment?: MutablePayment<PaymentDTO>) {
     const modalRef = this.modalService.open(AddDeleteComponent);
     if (payment) {
-      modalRef.componentInstance.payment = payment;
+      modalRef.componentInstance.payment = payment.payment;
+      modalRef.componentInstance.action = payment.action;
     }
 
     this.subs.add(
       modalRef.closed
         .pipe(
           filter(Boolean),
-          switchMap((res: PaymentDTO) =>
+          switchMap((res: MutablePayment<PaymentDTO>) =>
             iif(
-              () => res.id !== undefined,
-              this.paymentService.deletePayment(res.id),
-              this.paymentService.createPayment(res)
+              () => res.payment && res.payment.id !== undefined,
+              this.paymentService.performAction(res),
+              this.paymentService.createPayment(res.payment)
             ).pipe(
               switchMap(
                 () => (this.payments$ = this.paymentService.getPayments())
@@ -65,6 +66,8 @@ export class PaymentComponent implements OnDestroy {
         .subscribe()
     );
   }
+
+
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
