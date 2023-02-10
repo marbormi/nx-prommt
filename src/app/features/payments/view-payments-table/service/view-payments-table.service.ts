@@ -16,9 +16,6 @@ export class ViewPaymentsTableService {
       label: 'STATUS',
     },
     {
-      label: 'CURRENCY',
-    },
-    {
       label: 'AMOUNT',
     },
     {

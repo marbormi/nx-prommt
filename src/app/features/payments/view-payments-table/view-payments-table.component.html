@@ -13,39 +13,22 @@
             <div ngbDropdown container="body">
               <button type="button" class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Actions</button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem>Edit</button>
+                <button ngbDropdownItem>{{t('MARK_AS_PAID')}}</button>
                 <div class="dropdown-divider"></div>
-                <button ngbDropdownItem>Delete</button>
+                <button class="btn btn-danger" ngbDropdownItem>{{t('DELETE')}}</button>
               </div>
             </div>
-            <small class="text-muted">Dropdown uses container "body"</small>
           </td>
           <td>
-            {{ payment.id }}
+            **** {{ payment.id.slice(30) }}
           </td>
           <td>{{payment.createdDate | date }}</td>
           <td>{{ payment.payerEmail }}</td>
           <td>{{ payment.status }}</td>
-          <td>{{ payment.currency }}</td>
-          <td>{{ payment.amount }}</td>
+          <td>{{ payment.amount | currency: payment.currency: 'symbol'}}</td>
           <td>{{ payment.paidDate | date }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </ng-template>
-<!-- <div class="d-flex justify-content-between p-2">
-    <ngb-pagination
-      [collectionSize]="collectionSize"
-      [(page)]="page"
-      [pageSize]="pageSize"
-      (pageChange)="refreshCountries()"
-    >
-    </ngb-pagination>
-
-    <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
-      <option [ngValue]="2">2 items per page</option>
-      <option [ngValue]="4">4 items per page</option>
-      <option [ngValue]="6">6 items per page</option>
-    </select>
-  </div> -->

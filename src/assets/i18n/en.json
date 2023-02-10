@@ -9,9 +9,10 @@
     "PAID_DATE": "Paid date",
     "CREATE": "Create",
     "UPDATE": "Update",
-    "Delete": "Delete",
+    "DELETE": "Delete",
     "UPDATE_PAYMENT": "Update payment",
     "CREATE_PAYMENT": "Create new payment",
-    "CLOSE": "Close"
+    "CLOSE": "Close",
+    "MARK_AS_PAID": "Mark as paid"
 
   }

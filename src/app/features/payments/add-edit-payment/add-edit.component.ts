@@ -98,7 +98,7 @@ export const CURRENCIES_CODES = [
       </div>
     </ng-container>
   `,
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEditComponent {
   @Input() payment?: Partial<PaymentDTO>;
