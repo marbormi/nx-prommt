@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter, iif, Subscription, switchMap } from 'rxjs';
 import { PaymentService } from '../../core/';
 import { PaymentCreationDTO, PaymentDTO } from '../../shared';
-import { AddEditComponent } from './add-edit-payment/add-edit.component';
+import { AddDeleteComponent } from './add-delete-payment/add-delete.component';
 
 @Component({
   selector: 'nx-prommt-payment',
@@ -41,7 +41,7 @@ export class PaymentComponent implements OnDestroy {
   constructor(private paymentService: PaymentService) {}
 
   open(payment?: PaymentDTO) {
-    const modalRef = this.modalService.open(AddEditComponent);
+    const modalRef = this.modalService.open(AddDeleteComponent);
     if (payment) {
       modalRef.componentInstance.payment = payment;
     }

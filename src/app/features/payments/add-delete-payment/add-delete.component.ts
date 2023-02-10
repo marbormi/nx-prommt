@@ -109,7 +109,7 @@ export const CURRENCIES_CODES = [
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddEditComponent implements OnInit {
+export class AddDeleteComponent implements OnInit {
   @Input() payment?: Partial<PaymentDTO>;
 
   currencies: CurrencyCode[] = CURRENCIES_CODES.concat();
@@ -135,7 +135,8 @@ export class AddEditComponent implements OnInit {
   create() {
     this.activeModal.close(this.createPaymentForm.value as PaymentCreationDTO);
   }
+
   confirmDelete(){
-    this.activeModal.close(this.payment);
+    this.activeModal.close(this.payment?.id);
   }
 }
